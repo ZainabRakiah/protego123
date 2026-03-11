@@ -23,6 +23,47 @@ let safetyPoints = [];
 const BACKEND_URL = "http://127.0.0.1:5001";
 
 /* =====================================
+ * SAFE ROUTE REQUEST
+ ===================================== */
+
+async function findSafeRoute(startLat, startLng, endLat, endLng) {
+
+  try {
+
+    const res = await fetch(`${BACKEND_URL}/api/route`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        start_lat: startLat,
+        start_lng: startLng,
+        end_lat: endLat,
+        end_lng: endLng
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "No route found");
+      return;
+    }
+
+    drawRouteOnMap(data.route);
+
+    if (data.safety_score) {
+      document.getElementById("safetyScore").innerText =
+        `Safety: ${data.safety_score}/10`;
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Backend server not reachable");
+  }
+}
+
+/* =====================================
  * ARROW ICON (FIXED SCOPE)
  ===================================== */
 const arrowIcon = L.divIcon({
@@ -140,6 +181,24 @@ function getBearing(from, to) {
 }
 
 /* =====================================
+ * DRAW ROUTE
+ ===================================== */
+
+function drawRouteOnMap(route) {
+
+  if (routeLayer) {
+    map.removeLayer(routeLayer);
+  }
+
+  routeLayer = L.polyline(route, {
+    color: "#22c55e",
+    weight: 6
+  }).addTo(map);
+
+  map.fitBounds(routeLayer.getBounds());
+}
+
+/* =====================================
  * SOS
  ===================================== */
 document.getElementById("sosBtn").addEventListener("click", async () => {
@@ -161,7 +220,7 @@ document.getElementById("sosBtn").addEventListener("click", async () => {
 /* =====================================
  * CAMERA BUTTON (NORMAL)
  ===================================== */
-document.getElementById("cameraBtn").addEventListener("click", () => {
+document.getElementById("cameraNav")?.addEventListener("click", () => {
   currentEvidenceType = "NORMAL";
   lastSOSLocation = null;
   openCamera();
@@ -181,6 +240,16 @@ async function openCamera() {
   video.srcObject = cameraStream;
   modal.style.display = "block";
 }
+
+document.getElementById("closeCamera").addEventListener("click", () => {
+
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(track => track.stop());
+  }
+
+  document.getElementById("cameraModal").style.display = "none";
+
+});
 
 document.getElementById("capturePhoto").addEventListener("click", async () => {
   const video = document.getElementById("cameraView");
@@ -212,4 +281,42 @@ document.getElementById("capturePhoto").addEventListener("click", async () => {
   });
 
   alert("Evidence stored securely");
+});
+
+/* =====================================
+ * FIND ROUTE BUTTON
+ ===================================== */
+
+document.getElementById("findRouteBtn")?.addEventListener("click", () => {
+
+  if (!liveMarker) {
+    alert("Enable location tracking first");
+    return;
+  }
+
+  const start = liveMarker.getLatLng();
+
+  const destinationInput = document.getElementById("destInput").value;
+
+  if (!destinationInput) {
+    alert("Enter destination");
+    return;
+  }
+
+  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${destinationInput}`)
+    .then(res => res.json())
+    .then(data => {
+
+      if (!data.length) {
+        alert("Destination not found");
+        return;
+      }
+
+      const endLat = parseFloat(data[0].lat);
+      const endLng = parseFloat(data[0].lon);
+
+      findSafeRoute(start.lat, start.lng, endLat, endLng);
+
+    });
+
 });

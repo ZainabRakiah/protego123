@@ -270,7 +270,38 @@ def save_sos():
 
     return jsonify({"message": "SOS logged"}), 201
 
+# ============================
+# SAFE ROUTE API
+# ============================
+@app.route("/api/route", methods=["POST"])
+def get_safe_route():
+    data = request.json or {}
 
+    start_lat = data.get("start_lat")
+    start_lng = data.get("start_lng")
+    end_lat = data.get("end_lat")
+    end_lng = data.get("end_lng")
+
+    if not start_lat or not start_lng or not end_lat or not end_lng:
+        return jsonify({"error": "Missing coordinates"}), 400
+
+    # TEMPORARY: return dummy route
+    route = [
+        [start_lat, start_lng],
+        [(start_lat + end_lat) / 2, (start_lng + end_lng) / 2],
+        [end_lat, end_lng]
+    ]
+
+    return jsonify({
+        "route": route,
+        "safety_score": 7.8
+    })
+    
+
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({"error": "No route found"}), 404
+    
 # ============================
 # RUN SERVER
 # ============================

@@ -26,7 +26,7 @@ fetch(`${BACKEND_URL}/api/evidence/${user.id}`)
 
       div.innerHTML = `
         <p><strong>${ev.type}</strong> — ${time}</p>
-        <img src="${ev.image}" style="width:100%; border-radius:12px;" />
+        <img src="${ev.image_base64}" style="width:100%; border-radius:12px;" />
         <button style="margin-top:8px;" onclick="deleteEvidence(${ev.id})">
           🗑 Delete
         </button>

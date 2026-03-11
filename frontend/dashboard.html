@@ -6,7 +6,9 @@
 <title>SafeWalk — Dashboard</title>
 <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
+
 <header class="navbar">
 <div class="brand">SafeWalk</div>
 <nav>
@@ -17,54 +19,41 @@
 </nav>
 </header>
 
-
 <main class="main">
+
 <section class="hero card">
 <h2>Welcome, <span id="userDisplay">You</span></h2>
 <p class="muted">Choose a safe route, share location or report incidents.</p>
+
 <div class="hero-actions">
 <a class="btn" href="map.html">Open Map</a>
 <a class="btn ghost" href="report.html">Report Issue</a>
-<!-- ========================
-     EMERGENCY CAMERA PANEL
-========================= -->
-<div class="container card" style="margin-top:24px">
-  <h3>Emergency Camera</h3>
-
-  <video id="camera" autoplay playsinline style="width:100%; border-radius:12px; background:black;"></video>
-
-  <canvas id="snapshot" style="display:none;"></canvas>
-
-  <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-    <button id="openCameraBtn">Open Camera</button>
-    <button id="flashBtn">Flash ON</button>
-    <button id="captureBtn">Capture Photo</button>
-  </div>
-
-  <img id="preview" style="width:100%; margin-top:12px; display:none; border-radius:12px;" />
 </div>
 
-</div>
 </section>
 
-
 <section class="cards-row">
+
 <div class="card small">
 <h4>Live Tracking</h4>
 <p id="trackingStatus">Active</p>
 </div>
+
 <div class="card small">
 <h4>Nearest Police</h4>
 <p id="nearestPolice">1.2 km</p>
 </div>
+
 <div class="card small">
 <h4>Latest Alert</h4>
 <p id="latestAlert">All clear</p>
 </div>
+
 </section>
+
 </main>
 
-
 <script src="js/script.js"></script>
+
 </body>
 </html>

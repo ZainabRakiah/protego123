@@ -2,7 +2,7 @@
    SAFEWALK FRONTEND JS (BACKEND-AWARE)
 ------------------------------------------*/
 
-const BACKEND_URL = "http://192.168.1.19:5001";
+const BACKEND_URL = "http://127.0.0.1:5001";
 
 /* ================================
    AUTH SESSION HELPER
@@ -49,7 +49,7 @@ if (document.getElementById("loginBtn")) {
       sessionStorage.setItem("user", JSON.stringify(data.user));
 
       alert("Login successful");
-      window.location.href = "dashboard.html";
+      window.location.href = "map.html";
 
     } catch (err) {
       console.error(err);
