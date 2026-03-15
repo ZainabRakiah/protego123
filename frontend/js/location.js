@@ -1,4 +1,4 @@
-const BACKEND = "http://127.0.0.1:5001";
+const BACKEND = window.location.origin;
 const user = JSON.parse(sessionStorage.getItem("user"));
 
 function loadLocations() {

@@ -1,6 +1,6 @@
 const CAM_BACKEND_URL = typeof BACKEND_URL !== "undefined"
   ? BACKEND_URL
-  : "http://127.0.0.1:5001";
+  : window.location.origin;
 
 let camStream = null;
 let camTrack = null;

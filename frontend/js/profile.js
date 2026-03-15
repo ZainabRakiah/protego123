@@ -88,7 +88,7 @@ const address = document.getElementById("addressInput")?.value?.trim() || "";
 const user = JSON.parse(sessionStorage.getItem("user"))
 
 try {
-    const res = await fetch((typeof BACKEND_URL !== "undefined" ? BACKEND_URL : "http://127.0.0.1:5001") + "/api/update-profile",{
+    const res = await fetch((typeof BACKEND_URL !== "undefined" ? BACKEND_URL : window.location.origin) + "/api/update-profile",{
         method:"POST",
         headers:{
             "Content-Type":"application/json"

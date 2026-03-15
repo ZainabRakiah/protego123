@@ -1,6 +1,6 @@
 const ACC_BACKEND_URL = typeof BACKEND_URL !== "undefined"
   ? BACKEND_URL
-  : "http://127.0.0.1:5001";
+  : window.location.origin;
 
 let accidentSosTimerId = null;
 let accidentCountdown = 10;

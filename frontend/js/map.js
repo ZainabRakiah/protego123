@@ -426,7 +426,7 @@ async function reverseGeocode(lat, lng) {
   }
 }
 
-const MAP_BACKEND_URL = typeof BACKEND_URL !== "undefined" ? BACKEND_URL : "http://127.0.0.1:5001";
+const MAP_BACKEND_URL = typeof BACKEND_URL !== "undefined" ? BACKEND_URL : window.location.origin;
 
 async function reportAccidentFromMap(loc) {
   try {

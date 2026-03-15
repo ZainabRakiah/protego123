@@ -2,7 +2,8 @@
    SAFEWALK FRONTEND JS (BACKEND-AWARE)
 ------------------------------------------*/
 
-const BACKEND_URL = "http://127.0.0.1:5001";
+// Use same origin so API calls work when deployed (e.g. Render) and locally
+const BACKEND_URL = window.location.origin;
 
 /* ================================
    AUTH SESSION HELPER
