@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+import sys
 import webbrowser
 import threading
 import time
@@ -13,7 +14,12 @@ from functools import lru_cache
 from urllib.request import urlopen, Request
 from urllib.parse import urlencode
 
-from db import get_db, init_db
+# Ensure project root is on path so "backend.db" resolves when running via gunicorn
+_BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+_ROOT = os.path.dirname(_BACKEND_DIR)
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+from backend.db import get_db, init_db
 
 # Get the project root directory (parent of backend)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
