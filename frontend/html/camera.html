@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SafeWalk — SafeCam Evidence</title>
+  <link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/fab-bar.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">ProTego</div>
+    <nav>
+      <a href="map.html">Home</a>
+      <a href="report.html">Report</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <div class="container card safecam-intro-center">
+      <h2 class="text-center">SafeCam Evidence</h2>
+      <p class="muted text-center">
+        Securely capture evidence, protected behind your account password.
+      </p>
+
+      <section class="safecam-sos-section" style="margin-top: 16px;">
+        <button class="sos-round" onclick="toggleSafeCamSOS()" title="SafeCam SOS">
+          SOS
+        </button>
+      </section>
+
+      <section style="margin-top: 24px;">
+        <h3>Open Evidence Vault</h3>
+        <p class="muted">Enter the password you used when creating your account.</p>
+        <input type="password" id="vaultPassword" placeholder="Account password">
+        <button onclick="openEvidenceVault()">Open Gallery</button>
+      </section>
+
+      <section style="margin-top: 24px;">
+        <h3>Capture Evidence</h3>
+        <button onclick="openCameraOverlay()">Open Camera</button>
+      </section>
+    </div>
+  </main>
+
+  <!-- Fullscreen camera overlay -->
+  <div id="cameraOverlay" class="route-modal" style="display:none;">
+    <div class="route-card" style="width:100%;max-width:480px;">
+      <h3>SafeCam</h3>
+      <video id="safeCamVideo" autoplay playsinline style="width:100%;max-height:60vh;border-radius:8px;background:black;"></video>
+      <div class="route-buttons" style="margin-top:12px; justify-content:space-between;">
+        <button onclick="closeCameraOverlay()">Close</button>
+        <button onclick="capturePhoto()">Click Picture</button>
+        <button onclick="toggleTorch()">Torch</button>
+      </div>
+    </div>
+  </div>
+
+<script src="../js/script.js"></script>
+<script src="../js/fab-bar.js"></script>
+<script src="../js/camera.js"></script>
+</body>
+</html>

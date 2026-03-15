@@ -1,0 +1,48 @@
+/* Floating Action Bar - left side, visible on all pages */
+.fab-bar {
+  position: fixed;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: white;
+  padding: 12px 8px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border: 1px solid #e5e7eb;
+}
+
+.fab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #374151;
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: background 0.2s, color 0.2s;
+  min-width: 56px;
+}
+
+.fab-item:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.fab-item img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+.fab-item span {
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}

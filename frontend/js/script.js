@@ -58,7 +58,6 @@ if (document.getElementById("loginBtn")) {
   });
 }
 
-
 /* ================================
    SIGNUP PAGE (BACKEND)
 ================================ */

@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://127.0.0.1:5001";
+// BACKEND_URL is provided by script.js
 
 const userJson = sessionStorage.getItem("user");
 if (!userJson) {

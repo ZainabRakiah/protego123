@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SafeWalk — Report</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/fab-bar.css" />
+<style>
+#locationModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#locationModal.active {
+    display: flex;
+}
+
+.location-modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.location-modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.location-modal-header h3 {
+    margin: 0;
+    color: #111827;
+}
+
+.location-modal-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.location-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.location-options button {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.location-options button:hover {
+    background: #f3f4f6;
+}
+
+.location-options button.active {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+#mapContainer {
+    width: 100%;
+    height: 400px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 15px;
+}
+
+.search-location-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.location-modal-footer {
+    padding: 20px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.location-modal-footer button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+}
+
+.btn-ghost:hover {
+    background: rgba(37, 99, 235, 0.08);
+}
+
+.word-count {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+.word-count.error {
+    color: #ef4444;
+}
+</style>
+</head>
+<body>
+<header class="navbar">
+<div class="brand">SafeWalk</div>
+<nav>
+<a href="map.html">Home</a>
+<a href="report.html">Report</a>
+<a href="profile.html">Profile</a>
+</nav>
+</header>
+
+<main class="main">
+<div class="container card">
+<h2>Report an Issue</h2>
+<input id="rep-location" placeholder="Location (tap to use map)" readonly />
+<textarea id="rep-desc" placeholder="Describe what happened (minimum 10 words required)" style="height:140px"></textarea>
+<div class="word-count" id="wordCount">0 words</div>
+<div class="row">
+<button id="submitReport">Submit Report</button>
+<button id="attachMedia" class="ghost">Attach Photo/Video</button>
+</div>
+</div>
+</main>
+
+<!-- Location Selection Modal -->
+<div id="locationModal" onclick="if(event.target.id === 'locationModal') closeLocationModal();">
+<div class="location-modal-content" onclick="event.stopPropagation();">
+<div class="location-modal-header">
+<h3>Select Location</h3>
+<button class="btn-ghost" onclick="closeLocationModal()" style="padding: 5px 10px;">✕</button>
+</div>
+<div class="location-modal-body">
+<div class="location-options">
+<button id="useCurrentLocationBtn" onclick="useCurrentLocation()">Use Current Location</button>
+<button id="searchLocationBtn" onclick="showSearchLocation()">Search Location</button>
+</div>
+<input type="text" id="searchLocationInput" class="search-location-input" placeholder="Search for a location..." style="display:none;" />
+<div id="mapContainer"></div>
+<div id="selectedAddress" style="padding: 10px; background: #f3f4f6; border-radius: 8px; margin-top: 10px; display:none;">
+<strong>Selected Address:</strong> <span id="addressText"></span>
+</div>
+</div>
+<div class="location-modal-footer">
+<button class="btn-ghost" onclick="closeLocationModal()">Cancel</button>
+<button class="btn-primary" id="confirmLocationBtn" onclick="confirmLocation()" disabled>Select Location</button>
+</div>
+</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../js/script.js"></script>
+<script src="../js/fab-bar.js"></script>
+<script src="../js/report.js"></script>
+</body>
+</html>

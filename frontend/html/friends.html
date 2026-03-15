@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ProTego — Navigate Together</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/fab-bar.css" />
+  <link rel="stylesheet" href="../css/friends.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">ProTego</div>
+    <nav>
+      <a href="map.html">Home</a>
+      <a href="report.html">Report</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <main class="main friends-main">
+    <h1 class="friends-title">Navigate Together</h1>
+    <p class="friends-quote">Real-time location sharing, group navigation, travel companion</p>
+
+    <div class="friends-buttons">
+      <button class="btn friends-btn" onclick="openCreateTeamModal()">Create Team</button>
+      <button class="btn friends-btn" onclick="openJoinTeamModal()">Join a Team</button>
+      <button class="btn friends-btn" onclick="openFindCompanionModal()">Find a Companion</button>
+    </div>
+  </main>
+
+  <!-- Create Team Modal -->
+  <div id="createTeamModal" class="route-modal friends-modal" style="display:none;">
+    <div class="route-card">
+      <h3>Create Team</h3>
+      <label>Team Name</label>
+      <input id="createTeamName" placeholder="Enter team name">
+      <label>Your Name</label>
+      <input id="createUserName" placeholder="Your name">
+      <label>Start Location</label>
+      <input id="createStart" placeholder="Type address or use buttons below">
+      <div class="location-buttons">
+        <button class="ghost small" onclick="useCurrentForFriendsField('createStart')">Use Current Location</button>
+        <button class="ghost small" onclick="openFriendsLocationPicker('createStart')">Select from Map</button>
+      </div>
+      <label>Destination</label>
+      <input id="createDestination" placeholder="Type address or use buttons below">
+      <div class="location-buttons">
+        <button class="ghost small" onclick="useCurrentForFriendsField('createDestination')">Use Current Location</button>
+        <button class="ghost small" onclick="openFriendsLocationPicker('createDestination')">Select from Map</button>
+      </div>
+      <div class="route-buttons">
+        <button onclick="closeCreateTeamModal()">Cancel</button>
+        <button onclick="submitCreateTeam()">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Created Success Modal -->
+  <div id="teamSuccessModal" class="route-modal friends-modal" style="display:none;">
+    <div class="route-card">
+      <h3>Team Created Successfully</h3>
+      <p class="muted">Share the link below with friends to join your team.</p>
+      <div class="share-link-box" id="shareLinkBox"></div>
+      <div class="route-buttons">
+        <button onclick="shareTeamLink()">Share</button>
+        <button class="ghost" onclick="closeSuccessAndGoToMap()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Join Team Modal -->
+  <div id="joinTeamModal" class="route-modal friends-modal" style="display:none;">
+    <div class="route-card">
+      <h3>Join a Team</h3>
+      <label>Paste the link shared by the team creator</label>
+      <input id="joinTeamLink" placeholder="Paste link here">
+      <label>Your Name</label>
+      <input id="joinUserName" placeholder="Your name">
+      <label>Your Start Location</label>
+      <p class="muted" style="font-size:12px;margin:-4px 0 4px 0;">Destination is the team meetup point set by the creator</p>
+      <input id="joinStart" placeholder="Type address or use buttons below">
+      <div class="location-buttons">
+        <button class="ghost small" onclick="useCurrentForFriendsField('joinStart')">Use Current Location</button>
+        <button class="ghost small" onclick="openFriendsLocationPicker('joinStart')">Select from Map</button>
+      </div>
+      <div class="route-buttons">
+        <button onclick="closeJoinTeamModal()">Cancel</button>
+        <button onclick="submitJoinTeam()">Join</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Find Companion Modal (like route modal) -->
+  <div id="findCompanionModal" class="route-modal friends-modal" style="display:none;">
+    <div class="route-card">
+      <h3>Find a Companion</h3>
+      <label>Start Location</label>
+      <input id="compStartInput" placeholder="Enter start location">
+      <button class="ghost" onclick="useCurrentLocationForCompanion()">Use My Location</button>
+      <label>Destination</label>
+      <input id="compDestInput" placeholder="Enter destination">
+      <div class="route-buttons">
+        <button onclick="closeFindCompanionModal()">Cancel</button>
+        <button onclick="startBroadcasting()">Start Broadcasting</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Companion Match Popup -->
+  <div id="companionMatchModal" class="route-modal friends-modal" style="display:none;">
+    <div class="route-card">
+      <h3 id="companionMatchTitle">Travel Companion Found</h3>
+      <p id="companionMatchText"></p>
+      <div class="route-buttons">
+        <button onclick="declineCompanion()">Decline</button>
+        <button onclick="acceptCompanionChat()">Chat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Team Modal (from map side panel) -->
+  <div id="shareTeamModal" class="route-modal friends-modal" style="display:none;">
+    <div class="route-card">
+      <h3>Share Destination</h3>
+      <p class="muted">Share this link with friends to join the team.</p>
+      <div class="share-link-box" id="shareTeamLinkBox"></div>
+      <div class="route-buttons">
+        <button onclick="copyAndShareTeamLink()">Share</button>
+        <button class="ghost" onclick="closeShareTeamModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Join notification toast -->
+  <div id="joinToast" class="join-toast" style="display:none;"></div>
+
+  <!-- Map View (for Create/Join Team) -->
+  <div id="friendsMapView" class="friends-map-view" style="display:none;">
+    <div id="friendsMap" class="friends-map"></div>
+    <div id="teamSidePanel" class="team-side-panel">
+      <h4 id="panelTeamName">Team Name</h4>
+      <p id="panelUserName">Your name</p>
+      <p id="panelDestination">Destination</p>
+      <p id="panelDistance">Distance: —</p>
+      <p id="panelEta">ETA: —</p>
+      <div id="panelMembers"></div>
+      <div id="panelActions" class="panel-actions">
+        <button onclick="openShareTeamModal()">Share</button>
+        <button class="ghost" onclick="confirmDeleteTeam()">Delete</button>
+      </div>
+      <button id="leaveTeamBtn" class="btn ghost" style="display:none;margin-top:12px;" onclick="leaveTeam()">Leave Team</button>
+    </div>
+  </div>
+
+  <!-- Broadcast Map View (Find Companion) -->
+  <div id="broadcastMapView" class="friends-map-view" style="display:none;">
+    <div id="broadcastMap" class="friends-map"></div>
+    <div class="broadcast-side-panel">
+      <p id="broadcastDistance">Distance: —</p>
+      <p id="broadcastEta">ETA: —</p>
+      <button onclick="stopBroadcasting()">Stop Broadcasting</button>
+    </div>
+  </div>
+
+  <!-- Location Picker Modal (map, pin, save, cancel) -->
+  <div id="friendsLocationModal" class="route-modal friends-modal" style="display:none;">
+    <div class="route-card" style="max-width:500px;">
+      <h3>Select Location</h3>
+      <p class="muted">Tap on the map to drop a pin, or use your current location.</p>
+      <div class="location-buttons">
+        <button class="ghost small" onclick="useCurrentInFriendsPicker()">Use Current Location</button>
+      </div>
+      <div id="friendsPickerMap" style="height:280px;border-radius:8px;margin:12px 0;"></div>
+      <p id="friendsPickerAddress" class="muted" style="font-size:13px;margin:8px 0;"></p>
+      <div class="route-buttons">
+        <button class="ghost" onclick="cancelFriendsLocationPicker()">Cancel</button>
+        <button onclick="saveFriendsLocationPicker()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/fab-bar.js"></script>
+  <script src="../js/friends.js"></script>
+</body>
+</html>

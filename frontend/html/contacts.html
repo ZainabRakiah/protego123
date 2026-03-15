@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Emergency Contacts</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/contacts.css">
+<link rel="stylesheet" href="../css/fab-bar.css">
+
+</head>
+
+<body>
+
+<header class="navbar">
+<div class="brand">SafeWalk</div>
+</header>
+
+<main class="main">
+
+<div class="contacts-container">
+
+<h2>Emergency Contacts</h2>
+
+<div id="locationsList"></div>
+
+</div>
+
+</main>
+
+<!-- CONTACT POPUP MODAL -->
+<div id="contactModal" class="modal">
+<div class="modal-card">
+<h3 id="modalTitle">Add Contact</h3>
+
+<label>Address / Location</label>
+<input id="locationInput" type="text" placeholder="e.g. Home, Office, College">
+
+<label>Name</label>
+<input id="nameInput" type="text" placeholder="Contact name">
+
+<label>Phone</label>
+<input id="phoneInput" type="tel" placeholder="Phone number">
+
+<label>Email</label>
+<input id="emailInput" type="email" placeholder="Email (optional)">
+
+<div class="modal-nav">
+<button id="prevBtn" class="nav-btn" onclick="prevContact()" style="display:none;">←</button>
+<span id="contactCounter" class="contact-counter"></span>
+<button id="nextBtn" class="nav-btn" onclick="nextContact()" style="display:none;">→</button>
+</div>
+
+<div class="modal-buttons">
+<button class="btn" onclick="addAnotherContact()">Add Contact</button>
+<button class="btn primary" onclick="saveContacts()">Save</button>
+<button class="btn ghost" onclick="cancelModal()">Cancel</button>
+</div>
+
+</div>
+</div>
+
+<script src="../js/script.js"></script>
+<script src="../js/fab-bar.js"></script>
+<script src="../js/contacts.js"></script>
+
+</body>
+</html>

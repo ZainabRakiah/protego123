@@ -1,6 +1,11 @@
 import sqlite3
+import os
 
-DB_NAME = "database.db"
+# Always use the project-root database file,
+# regardless of where the server is started from.
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
+DB_NAME = os.path.join(PROJECT_ROOT, "database.db")
 
 
 def get_db():
@@ -22,9 +27,16 @@ def init_db():
             name TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
             phone TEXT,
+            address TEXT,
             password_hash TEXT NOT NULL
         )
     """)
+    
+    # Add address column if it doesn't exist (for existing databases)
+    try:
+        cur.execute("ALTER TABLE users ADD COLUMN address TEXT")
+    except sqlite3.OperationalError:
+        pass  # Column already exists
 
     # =========================
     # EVIDENCE (NORMAL + SOS)
@@ -84,6 +96,24 @@ def init_db():
             lat REAL,
             lng REAL,
             message TEXT,
+            timestamp INTEGER NOT NULL,
+
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )
+    """)
+
+    # =========================
+    # REPORTS (User Reports)
+    # =========================
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS reports (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            location_label TEXT,
+            lat REAL,
+            lng REAL,
+            description TEXT NOT NULL,
+            image_base64 TEXT,
             timestamp INTEGER NOT NULL,
 
             FOREIGN KEY(user_id) REFERENCES users(id)

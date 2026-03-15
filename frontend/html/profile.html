@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/profile.css">
+<link rel="stylesheet" href="../css/fab-bar.css">
+
+</head>
+
+<body>
+
+<header class="navbar">
+<div class="brand">SafeWalk</div>
+</header>
+
+<main class="main">
+
+<div class="profile-card">
+
+<div class="avatar-wrapper">
+<img id="avatar" src="../assets/avatar.png">
+<input type="file" id="avatarUpload" hidden>
+<button class="avatar-edit" onclick="uploadAvatar()">✏</button>
+</div>
+
+<h2 id="username">User</h2>
+
+<div class="info">
+
+<div class="info-row">
+<label>Phone</label>
+<span id="phoneText">Not set</span>
+</div>
+
+<div class="info-row">
+<label>Address</label>
+<span id="addressText">Not set</span>
+</div>
+
+</div>
+
+<div class="profile-buttons">
+
+<button class="btn" id="editBtn" onclick="enableEdit()">Edit Profile</button>
+
+<button class="btn ghost" onclick="window.location.href='contacts.html'">
+Emergency Contacts
+</button>
+
+</div>
+
+<div class="status-row">
+
+<div class="status-card">
+<h4>Live Tracking</h4>
+<p>Active</p>
+</div>
+
+<div class="status-card">
+<h4>Nearest Police</h4>
+<p>1.2 km</p>
+</div>
+
+<div class="status-card">
+<h4>Latest Alert</h4>
+<p>All clear</p>
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<script src="../js/script.js"></script>
+<script src="../js/fab-bar.js"></script>
+<script src="../js/profile.js"></script>
+
+</body>
+</html>

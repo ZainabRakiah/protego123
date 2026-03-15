@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Search Route</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/fab-bar.css">
+
+</head>
+
+<body>
+
+<header class="navbar">
+<div class="brand">SafeWalk</div>
+</header>
+
+<main class="main">
+
+<div class="container card" style="max-width:450px;margin:auto">
+
+<h3>Plan Route</h3>
+
+<label>Start Location</label>
+
+<input
+id="startInput"
+placeholder="Enter start location"
+/>
+
+<button class="ghost" onclick="useCurrentLocation()">
+Use My Location
+</button>
+
+
+<label>Destination</label>
+
+<input
+id="destInput"
+placeholder="Enter destination"
+/>
+
+
+<button class="btn" onclick="submitRoute()">
+Find Route
+</button>
+
+</div>
+
+</main>
+
+<script src="../js/script.js"></script>
+<script src="../js/fab-bar.js"></script>
+<script src="../js/search.js"></script>
+
+</body>
+</html>a

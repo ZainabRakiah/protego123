@@ -1,0 +1,137 @@
+.friends-main {
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.friends-title {
+  font-size: 1.75rem;
+  margin-bottom: 8px;
+}
+
+.friends-quote {
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+.friends-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.friends-btn {
+  width: 100%;
+}
+
+.friends-map-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background: #fff;
+  display: flex;
+}
+
+.friends-map {
+  flex: 1;
+  height: 100%;
+  min-height: 300px;
+}
+
+.team-side-panel {
+  width: 280px;
+  padding: 16px;
+  background: #f9fafb;
+  border-left: 1px solid #e5e7eb;
+  overflow-y: auto;
+}
+
+.team-side-panel h4 {
+  margin: 0 0 8px 0;
+}
+
+.team-side-panel p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.panel-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.broadcast-side-panel {
+  width: 200px;
+  padding: 16px;
+  background: #f9fafb;
+  border-left: 1px solid #e5e7eb;
+}
+
+.share-link-box {
+  padding: 12px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.user-marker-me { color: #2563eb; }
+.user-marker-friend { color: #22c55e; }
+
+.location-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.location-buttons button.small {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.muted {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.join-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #22c55e;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 6000;
+  animation: toastIn 0.3s ease;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.route-tooltip {
+  font-size: 13px !important;
+  padding: 8px 12px !important;
+}
+
+@media (max-width: 768px) {
+  .team-side-panel {
+    width: 100%;
+    max-height: 40vh;
+  }
+  .friends-map-view {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SafeWalk — Map</title>
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/fab-bar.css" />
+</head>
+<body>
+<header class="navbar">
+<div class="brand">ProTego</div>
+<nav>
+<a href="map.html">Home</a>
+<a href="report.html">Report</a>
+<a href="profile.html">Profile</a>
+</nav>
+</header>
+<main class="main">
+<div class="map-full-wrapper card">
+
+    <div class="search-panel">
+        <span class="search-icon">🔍</span>
+        <input
+            id="searchInput"
+            class="search-input"
+            placeholder="Search Here"
+            readonly
+            onclick="openSearchPage()"
+        >
+    </div>
+
+    <div id="map" class="map-full"></div>
+</div>
+<div id="routeModal" class="route-modal">
+
+<div class="route-card">
+
+<h3>Plan Route</h3>
+
+<label>Start Location</label>
+
+<input id="startInput" placeholder="Enter start location">
+
+<button id="useMyLocBtn" class="ghost" onclick="useCurrentLocation()">Use My Location</button>
+
+<label>Destination</label>
+
+<input id="destInput" placeholder="Enter destination">
+
+<div class="route-buttons">
+
+<button onclick="closeRouteModal()">Cancel</button>
+
+<button onclick="submitRoute()">Find Route</button>
+
+</div>
+
+</div>
+
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../js/script.js"></script>
+<script src="../js/fab-bar.js"></script>
+<script src="../js/map.js"></script>
+</body>
+</html>
