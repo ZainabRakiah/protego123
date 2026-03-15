@@ -139,6 +139,16 @@ def _all_incident_points():
     return pts["incident"] + _get_db_incident_points()
 
 
+# Fallback hospitals (Bangalore) when CSV is missing so nearest-3 always works
+_FALLBACK_HOSPITALS = [
+    {"name": "Ramaiah Memorial Hospital", "address": "New BEL Rd, Bangalore", "phone": "080 4050 2000", "lat": 13.0216357, "lng": 77.5723767},
+    {"name": "VSH Hospital", "address": "2, Vittal Mallya Rd, Bangalore", "phone": "080 2227 7979", "lat": 12.9679798, "lng": 77.5950745},
+    {"name": "Manipal Hospitals", "address": "98, HAL Old Airport Rd, Bangalore", "phone": "1800 102 4647", "lat": 12.9628509, "lng": 77.6273702},
+    {"name": "Apollo Hospitals Bannerghatta", "address": "154, Bannerghatta Rd, Bangalore", "phone": "080 2630 4050", "lat": 12.892, "lng": 77.601},
+    {"name": "Fortis Hospital Cunningham Road", "address": "14, Cunningham Rd, Bangalore", "phone": "096868 60310", "lat": 12.98, "lng": 77.59},
+]
+
+
 @lru_cache(maxsize=1)
 def _load_hospitals():
     candidates = [
@@ -151,28 +161,28 @@ def _load_hospitals():
             path = p
             break
     if not path:
-        return []
+        return list(_FALLBACK_HOSPITALS)
 
     hospitals = []
     with open(path, "r", encoding="utf-8", errors="ignore", newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            lat = row.get("latitude") or row.get("lat")
-            lon = row.get("longitude") or row.get("lon") or row.get("lng")
+            lat = (row.get("latitude") or row.get("lat") or "").strip()
+            lon = (row.get("longitude") or row.get("lon") or row.get("lng") or "").strip()
             try:
-                if lat is None or lon is None:
+                if not lat or not lon:
                     continue
                 lat = float(lat)
                 lon = float(lon)
             except Exception:
                 continue
 
-            name = row.get("Hospital_name") or row.get("name") or "Hospital"
-            address = row.get("full_address_for_geocoding") or row.get("Address") or row.get("address") or ""
-            phone = row.get("Phone_number") or row.get("phone") or ""
+            name = (row.get("Hospital_name") or row.get("name") or "Hospital").strip()
+            address = (row.get("full_address_for_geocoding") or row.get("Address") or row.get("address") or "").strip()
+            phone = (row.get("Phone_number") or row.get("phone") or "").strip()
             hospitals.append({"name": name, "address": address, "phone": phone, "lat": lat, "lng": lon})
 
-    return hospitals
+    return hospitals if hospitals else list(_FALLBACK_HOSPITALS)
 
 
 def _count_within(points, lat, lng, radius_m=500.0):

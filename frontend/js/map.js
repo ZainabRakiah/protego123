@@ -47,6 +47,7 @@ if (isSelectionMode) {
   startLiveTracking();
   /* Do NOT clear route on moveend - it was removing the route when fitBounds ran after drawing */
 }
+  tryDrawRouteFromStorage();
 })
 }
 initMap()
@@ -458,16 +459,21 @@ function saveSelectedLocation() {
   window.location.href = `${returnPage}.html?selected=true`;
 }
 
-/* ROUTE FROM SEARCH PAGE OR ACCIDENT (ROUTE TO HOSPITAL) */
-const startLocation = localStorage.getItem("routeStart");
-const destLocation = localStorage.getItem("routeDest");
-const destLatStr = localStorage.getItem("routeDestLat");
-const destLngStr = localStorage.getItem("routeDestLng");
+/* ROUTE FROM SEARCH PAGE OR ACCIDENT (ROUTE TO HOSPITAL) – run after map is ready */
+function tryDrawRouteFromStorage() {
+  if (!map) return;
+  const startLocation = localStorage.getItem("routeStart");
+  const destLocation = localStorage.getItem("routeDest");
+  const destLatStr = localStorage.getItem("routeDestLat");
+  const destLngStr = localStorage.getItem("routeDestLng");
 
-if (startLocation && (destLocation || (destLatStr && destLngStr))) {
+  if (!startLocation || (!destLocation && !(destLatStr && destLngStr))) return;
+
   const startParts = startLocation.split(",");
   const startLat = parseFloat(startParts[0]);
   const startLng = parseFloat(startParts[1]);
+  if (isNaN(startLat) || isNaN(startLng)) return;
+
   const endLat = destLatStr ? parseFloat(destLatStr) : NaN;
   const endLng = destLngStr ? parseFloat(destLngStr) : NaN;
   const hasDestCoords = !isNaN(endLat) && !isNaN(endLng);
@@ -493,6 +499,8 @@ if (startLocation && (destLocation || (destLatStr && destLngStr))) {
         alert("Could not find destination. Please try again.");
       });
   }
+  localStorage.removeItem("routeStart");
+  localStorage.removeItem("routeDest");
 }
 
 function openSafetyRoute() {

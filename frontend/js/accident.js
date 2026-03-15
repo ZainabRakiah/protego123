@@ -27,7 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadNearbyHospitals() {
-  if (!navigator.geolocation) return;
+  const list = document.getElementById("hospitalList");
+  if (list) list.innerHTML = "<p class='muted'>Loading nearby hospitals…</p>";
+  if (!navigator.geolocation) {
+    if (list) list.innerHTML = "<p class='muted'>Location access is needed to find nearby hospitals.</p>";
+    return;
+  }
   navigator.geolocation.getCurrentPosition(
     async pos => {
       const lat = pos.coords.latitude;
@@ -36,21 +41,24 @@ async function loadNearbyHospitals() {
         const res = await fetch(
           `${ACC_BACKEND_URL}/api/hospitals-nearby?lat=${lat}&lng=${lng}`
         );
-        if (!res.ok) return;
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         renderHospitals(data.hospitals || []);
       } catch (err) {
         console.error("Hospitals error", err);
+        if (list) list.innerHTML = "<p class='muted'>Could not load hospitals. Check connection and try again.</p>";
       }
     },
     err => {
       console.error("Hospitals location error", err);
-    }
+      if (list) list.innerHTML = "<p class='muted'>Allow location access to see nearest hospitals.</p>";
+    },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 }
   );
 }
 
 function renderHospitals(hospitals) {
   const list = document.getElementById("hospitalList");
+  if (!list) return;
   list.innerHTML = "";
   if (!hospitals.length) {
     list.innerHTML = "<p class='muted'>No hospitals found nearby.</p>";
@@ -61,17 +69,17 @@ function renderHospitals(hospitals) {
     div.className = "card small";
     const distanceText =
       typeof h.distance_km === "number"
-        ? `${h.distance_km.toFixed(1)} km`
+        ? `${h.distance_km.toFixed(1)} km away`
         : "";
     const lat = typeof h.lat === "number" ? h.lat : "";
     const lng = typeof h.lng === "number" ? h.lng : "";
     div.innerHTML = `
-      <h4>${h.name || "Hospital"}</h4>
-      <p class="muted">${h.address || ""}</p>
+      <h4>${(h.name || "Hospital").replace(/</g, "&lt;")}</h4>
+      <p class="muted">${(h.address || "").replace(/</g, "&lt;")}</p>
       <p class="muted">${distanceText}</p>
-      <button onclick="routeToHospital('${encodeURIComponent(
+      <button type="button" onclick="routeToHospital('${encodeURIComponent(
         h.address || ""
-      )}', ${lat}, ${lng})">Route</button>
+      )}', ${lat}, ${lng})">Get route</button>
     `;
     list.appendChild(div);
   });
